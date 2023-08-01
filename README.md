@@ -23,9 +23,9 @@ The transmitter reads data from native FIFO buffer. Then, it transmits output si
 |     clk     |  I  |       -       | Clock             |
 |     rst     |  I  |       -       | Reset             |
 |     din     |  I  |       -       | Receive data      |
-|     dout    |  O  |       -       | FIFO write data   |
+|     dout    |  O  |       0       | FIFO write data   |
 |     full    |  I  |       -       | FIFO full         |
-|     we      |  O  |       -       | FIFO write enable |
+|     we      |  O  |       0       | FIFO write enable |
 
 ### Transmitter
 
@@ -35,5 +35,5 @@ The transmitter reads data from native FIFO buffer. Then, it transmits output si
 |     rst     |  I  |       -       | Reset             |
 |     din     |  I  |       -       | FIFO read data    |
 |    empty    |  I  |       -       | FIFO empty        |
-|     re      |  O  |       -       | FIFO read enable  |
-|     dout    |  O  |       -       | Transmit data     |
+|     re      |  O  |       0       | FIFO read enable  |
+|     dout    |  O  |       1       | Transmit data     |
