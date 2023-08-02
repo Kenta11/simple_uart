@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module simple_transmitter #(
   parameter [31:0] CLOCK_FREQUENCY = 32'd100_000_000,
   parameter [31:0] BAUD_RATE = 32'd115200,
@@ -94,5 +92,4 @@ module simple_transmitter #(
     endcase
 
   assign full_clocks = (clocks == (ONE_CYCLE - 1));
-
 endmodule

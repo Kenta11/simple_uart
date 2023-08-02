@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module simple_receiver #(
   parameter [31:0] CLOCK_FREQUENCY = 32'd100_000_000,
   parameter [31:0] BAUD_RATE = 32'd115200,
@@ -40,10 +38,10 @@ module simple_receiver #(
   if (rst)
     dout <= {WORD_WIDTH{1'b0}};
   else
-  case (state)
-    STATE_RECEIVE_DATA_BIT: dout <= full_clocks ? {zeros <= (ONE_CYCLE / 2), dout[WORD_WIDTH-1:1]} : dout;
-    default:                dout <= dout;
-  endcase
+    case (state)
+      STATE_RECEIVE_DATA_BIT: dout <= full_clocks ? {zeros <= (ONE_CYCLE / 2), dout[WORD_WIDTH-1:1]} : dout;
+      default:                dout <= dout;
+    endcase
 
   assign we = (state == STATE_WRITE_WORD);
 
@@ -51,14 +49,14 @@ module simple_receiver #(
   if (rst)
     state <= STATE_WAIT;
   else
-  case (state)
-    STATE_WAIT:             state <= received_start_bit ? STATE_IGNORE_DATA_BIT : state;
-    STATE_IGNORE_DATA_BIT:  state <= half_clocks ? STATE_RECEIVE_DATA_BIT : state;
-    STATE_RECEIVE_DATA_BIT: state <= received_a_word ? STATE_RECEIVE_STOP_BIT : state;
-    STATE_RECEIVE_STOP_BIT: state <= full_clocks ? (((zeros <= (ONE_CYCLE / 2)) && (~full)) ? STATE_WRITE_WORD : STATE_WAIT) : state;
-    STATE_WRITE_WORD:       state <= STATE_WAIT;
-    default:                state <= state;
-  endcase
+    case (state)
+      STATE_WAIT:             state <= received_start_bit ? STATE_IGNORE_DATA_BIT : state;
+      STATE_IGNORE_DATA_BIT:  state <= half_clocks ? STATE_RECEIVE_DATA_BIT : state;
+      STATE_RECEIVE_DATA_BIT: state <= received_a_word ? STATE_RECEIVE_STOP_BIT : state;
+      STATE_RECEIVE_STOP_BIT: state <= full_clocks ? (((zeros <= (ONE_CYCLE / 2)) && (~full)) ? STATE_WRITE_WORD : STATE_WAIT) : state;
+      STATE_WRITE_WORD:       state <= STATE_WAIT;
+      default:                state <= state;
+    endcase
 
   always_ff@(posedge clk)
   if (rst)
@@ -110,5 +108,4 @@ module simple_receiver #(
 
   assign half_clocks = (clocks == (ONE_CYCLE / 2));
   assign full_clocks = (clocks == (ONE_CYCLE - 1));
-
 endmodule
