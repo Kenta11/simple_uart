@@ -45,10 +45,6 @@ module tb_simple_receiver;
 
       #CLOCK_PERIOD;
 
-      `CHECK_EQUAL(we, 1'b0);
-
-      #CLOCK_PERIOD;
-
       // state == STATE_WRITE_WORD
       `CHECK_EQUAL(dout, 8'hA5);
       `CHECK_EQUAL(we, 1'b1);
