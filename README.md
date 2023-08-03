@@ -3,8 +3,8 @@
 ## What is this?
 
 The simple uart is a pair of SystemVerilog modules for serial communication.
-The receiver receives input signals. Then, it writes the data into native FIFO buffer.
-The transmitter reads data from native FIFO buffer. Then, it transmits output signals.
+The receiver receives input signals. Then, it writes the data into Xilinx native FIFO buffer.
+The transmitter reads data from Xilinx native FIFO buffer. Then, it transmits output signals.
 
 ## Interface
 
@@ -37,3 +37,7 @@ The transmitter reads data from native FIFO buffer. Then, it transmits output si
 |    empty    |  I  |       -       | FIFO empty        |
 |     re      |  O  |       0       | FIFO read enable  |
 |     dout    |  O  |       1       | Transmit data     |
+
+## License
+
+It is licensed under MIT license. See [LICENSE](LICENSE) for details.
