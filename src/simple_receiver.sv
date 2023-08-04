@@ -38,8 +38,12 @@ module simple_receiver #(
     case (state)
       STATE_WAIT:         state <= (~din) ? STATE_RECEIVE_BITS : state;
       STATE_RECEIVE_BITS:
-        if (full_clock_counts && (~data[0]))
-          state <= (~full) ? STATE_WRITE_WORD : STATE_WAIT;
+        if (full_clock_counts) begin
+          if (~data[0])
+            state <= (data[WORD_WIDTH+1] && (~full)) ? STATE_WRITE_WORD : STATE_WAIT;
+          else
+            state <= (data == {{WORD_WIDTH+2}{1'b1}}) ? STATE_WAIT : state;
+        end
         else
           state <= state;
       STATE_WRITE_WORD:   state <= STATE_WAIT;
