@@ -1,4 +1,4 @@
-module simple_receiver #(
+module receiver_axis #(
   parameter [31:0] CLOCK_FREQUENCY = 32'd100_000_000,
   parameter [31:0] BAUD_RATE       = 32'd115200,
   parameter [31:0] WORD_WIDTH      = 32'd8
@@ -6,18 +6,18 @@ module simple_receiver #(
   input                   clk,
   input                   rst,
   input                   din,
-  output [WORD_WIDTH-1:0] dout,
-  input                   full,
-  output                  we
+  output [WORD_WIDTH-1:0] dout_axis_tdata,
+  input                   dout_axis_tready,
+  output                  dout_axis_tvalid
 );
   // constants
   localparam [31:0] CLOCKS_PER_BIT = CLOCK_FREQUENCY / BAUD_RATE;
 
   // type definition
-  typedef enum logic [2:0] {
-    STATE_WAIT         = 3'h0,
-    STATE_RECEIVE_BITS = 3'h1,
-    STATE_WRITE_WORD   = 3'h2
+  typedef enum logic [1:0] {
+    STATE_WAIT         = 2'h0,
+    STATE_RECEIVE_BITS = 2'h1,
+    STATE_WRITE_WORD   = 2'h2
   } state_t;
 
   // registers and wires
@@ -28,8 +28,8 @@ module simple_receiver #(
   logic                  full_clock_counts;
 
   // logics
-  assign dout = data[WORD_WIDTH:1];
-  assign we = (state == STATE_WRITE_WORD);
+  assign dout_axis_tdata = data[WORD_WIDTH:1];
+  assign dout_axis_tvalid = (state == STATE_WRITE_WORD);
 
   always_ff@(posedge clk)
   if (rst)
@@ -40,7 +40,7 @@ module simple_receiver #(
       STATE_RECEIVE_BITS:
         if (full_clock_counts) begin
           if (~data[0])
-            state <= (data[WORD_WIDTH+1] && (~full)) ? STATE_WRITE_WORD : STATE_WAIT;
+            state <= data[WORD_WIDTH+1] ? STATE_WRITE_WORD : STATE_WAIT;
           else
             state <= (data == {{WORD_WIDTH+2}{1'b1}}) ? STATE_WAIT : state;
         end

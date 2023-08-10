@@ -1,7 +1,11 @@
-SRCS = simple_receiver.sv \
-       simple_transmitter.sv
-TESTS = tb_simple_receiver.sv \
-        tb_simple_transmitter.sv
+SRCS = receiver_axis.sv \
+       receiver_native.sv \
+       transmitter_axis.sv \
+	   transmitter_native.sv
+TESTS = tb_receiver_axis.sv \
+		tb_receiver_native.sv \
+        tb_transmitter_native.sv \
+		tb_transmitter_axis.sv
 
 .PHONY: all test clean
 
