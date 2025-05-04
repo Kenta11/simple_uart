@@ -22,7 +22,7 @@ module tb_receiver_axis;
       clk              = 1'b0;
       rst              = 1'b0;
       din              = 1'b1;
-      dout_axis_tready = 1'b0;
+      dout_axis_tready = 1'b1;
 
       #CLOCK_PERIOD;
 

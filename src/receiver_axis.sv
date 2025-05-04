@@ -46,7 +46,11 @@ module receiver_axis #(
         end
         else
           state <= state;
-      STATE_WRITE_WORD:   state <= STATE_WAIT;
+      STATE_WRITE_WORD:
+        if (dout_axis_tready)
+          state <= STATE_WAIT;
+        else
+          state <= state;
       default:            state <= state;
     endcase
 
